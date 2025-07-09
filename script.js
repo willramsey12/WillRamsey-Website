@@ -1,25 +1,7 @@
 // DOM Elements
 const navbar = document.getElementById('navbar');
 const navMenu = document.getElementById('nav-menu');
-const hamburger = document.getElementById('hamburger');
-const themeToggle = document.getElementById('theme-toggle');
 const navLinks = document.querySelectorAll('.nav-link');
-
-// Theme Management
-class ThemeManager {
-    constructor() {
-        this.init();
-    }
-
-    init() {
-        const savedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-        document.documentElement.setAttribute('data-theme', theme);
-        this.updateThemeToggle(theme);
-        this.setupThemeToggle();
-    }
-}
 
 // Navigation Manager
 class NavigationManager {
@@ -28,42 +10,9 @@ class NavigationManager {
     }
 
     init() {
-        this.setupMobileMenu();
         this.setupSmoothScrolling();
         this.setupScrollEffects();
         this.setupActiveLinks();
-    }
-
-    setupMobileMenu() {
-        hamburger.addEventListener('click', () => this.toggleMobileMenu());
-        
-        // Close menu when clicking nav links
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => this.closeMobileMenu());
-        });
-        
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!navbar.contains(e.target) && navMenu.classList.contains('active')) {
-                this.closeMobileMenu();
-            }
-        });
-    }
-
-    toggleMobileMenu() {
-        navMenu.classList.toggle('active');
-        hamburger.classList.toggle('active');
-        
-        const isExpanded = navMenu.classList.contains('active');
-        hamburger.setAttribute('aria-expanded', isExpanded);
-        document.body.style.overflow = isExpanded ? 'hidden' : '';
-    }
-
-    closeMobileMenu() {
-        navMenu.classList.remove('active');
-        hamburger.classList.remove('active');
-        hamburger.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
     }
 
     setupSmoothScrolling() {
@@ -80,8 +29,6 @@ class NavigationManager {
                         top: offsetTop,
                         behavior: 'smooth'
                     });
-                    
-                    this.closeMobileMenu();
                 }
             });
         });
@@ -99,14 +46,10 @@ class NavigationManager {
         const scrolled = window.scrollY > 50;
         
         if (scrolled) {
-            navbar.style.background = document.documentElement.getAttribute('data-theme') === 'dark' 
-                ? 'rgba(17, 24, 39, 0.98)' 
-                : 'rgba(250, 250, 250, 0.98)';
+            navbar.style.background = 'rgba(250, 250, 250, 0.98)';
             navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
         } else {
-            navbar.style.background = document.documentElement.getAttribute('data-theme') === 'dark' 
-                ? 'rgba(17, 24, 39, 0.95)' 
-                : 'rgba(250, 250, 250, 0.95)';
+            navbar.style.background = 'rgba(250, 250, 250, 0.95)';
             navbar.style.boxShadow = 'none';
         }
     }
@@ -225,7 +168,7 @@ class ScrollAnimations {
                 currentNumber += increment;
                 if (currentNumber >= finalNumber) {
                     clearInterval(timer);
-                    element.textContent = finalNumber + '+';
+                    element.textContent = finalNumber;
                 } else {
                     element.textContent = Math.floor(currentNumber);
                 }
@@ -272,7 +215,6 @@ class RetroEffects {
         const highlight = document.querySelector('.highlight');
         if (highlight) {
             highlight.addEventListener('mouseenter', () => {
-                const originalText = highlight.textContent;
                 highlight.style.color = 'var(--accent-secondary)';
                 
                 setTimeout(() => {
@@ -299,7 +241,6 @@ function debounce(func, wait) {
 // Initialize Everything
 document.addEventListener('DOMContentLoaded', () => {
     // Core functionality
-    const themeManager = new ThemeManager();
     const navigationManager = new NavigationManager();
     const scrollAnimations = new ScrollAnimations();
     const retroEffects = new RetroEffects();
@@ -325,25 +266,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 200);
         }
     });
-    
-    // Handle resize
-    window.addEventListener('resize', debounce(() => {
-        if (window.innerWidth > 968 && navMenu.classList.contains('active')) {
-            navigationManager.closeMobileMenu();
-        }
-    }, 250));
-    
-    // Keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && navMenu.classList.contains('active')) {
-            navigationManager.closeMobileMenu();
-        }
-    });
 });
 
 // Export for external use
 window.portfolioJS = {
-    ThemeManager,
     NavigationManager,
     ScrollAnimations,
     RetroEffects

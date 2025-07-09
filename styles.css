@@ -14,7 +14,7 @@
     --text-primary: #1F2937;
     --text-secondary: #6B7280;
     --text-muted: #9CA3AF;
-    --bg-primary: #FAFAFA;
+    --bg-primary: #FAF9F6;
     --bg-secondary: #F3F4F6;
     --bg-tertiary: #E5E7EB;
     --bg-card: #FFFFFF;
@@ -156,11 +156,6 @@ body {
 .theme-toggle:hover {
     transform: translate(-1px, -1px);
     box-shadow: var(--shadow-retro);
-}
-
-.sun-icon, .moon-icon {
-    transition: var(--transition);
-    font-size: 12px;
 }
 
 [data-theme="dark"] .sun-icon {
@@ -312,6 +307,13 @@ body {
     font-size: 3rem;
     font-weight: 700;
     color: var(--bg-card);
+}
+
+.placeholder-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;   /* ensures the image fills the space nicely */
+    display: block;
 }
 
 /* Section Styles */

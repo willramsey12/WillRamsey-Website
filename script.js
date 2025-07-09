@@ -15,40 +15,9 @@ class ThemeManager {
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-        
         document.documentElement.setAttribute('data-theme', theme);
         this.updateThemeToggle(theme);
         this.setupThemeToggle();
-    }
-
-    toggle() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        this.updateThemeToggle(newTheme);
-    }
-
-    updateThemeToggle(theme) {
-        if (theme === 'dark') {
-            themeToggle.setAttribute('aria-label', 'Switch to light mode');
-        } else {
-            themeToggle.setAttribute('aria-label', 'Switch to dark mode');
-        }
-    }
-
-    setupThemeToggle() {
-        themeToggle.addEventListener('click', () => this.toggle());
-        
-        // Listen for system theme changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-            if (!localStorage.getItem('theme')) {
-                const newTheme = e.matches ? 'dark' : 'light';
-                document.documentElement.setAttribute('data-theme', newTheme);
-                this.updateThemeToggle(newTheme);
-            }
-        });
     }
 }
 
